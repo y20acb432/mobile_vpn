@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/screens/home_screen.dart';
 
 import '../controllers/home_controller.dart';
 import '../helpers/pref.dart';
@@ -28,16 +29,19 @@ class VpnCard extends StatelessWidget {
             controller.vpn.value = vpn;
             Pref.vpn = vpn;
             Get.back();
-
+            //HomeScreen hs = new HomeScreen();
             // MyDialogs.success(msg: 'Connecting VPN Location...');
 
-            if (controller.vpnState.value == VpnEngine.vpnConnected) {
-              VpnEngine.stopVpn();
-              Future.delayed(
-                  Duration(seconds: 2), () => controller.connectToVpn());
-            } else {
-              controller.connectToVpn();
-            }
+            // if (controller.vpnState.value == VpnEngine.vpnConnected) {
+              
+            //   hs.switchValue = false;
+            //   VpnEngine.stopVpn();
+            //   Future.delayed(
+            //       Duration(seconds: 2), (){hs.switchValue=true;controller.connectToVpn();});
+            // } else {
+            //   hs.switchValue = true;
+            //   controller.connectToVpn();
+            // }
           },
           borderRadius: BorderRadius.circular(15),
           child: ListTile(

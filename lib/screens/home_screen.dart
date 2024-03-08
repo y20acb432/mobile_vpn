@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
+import 'package:vpn_basic_project/screens/select_apps.dart';
 import '../controllers/home_controller.dart';
 import '../main.dart';
 import '../models/vpn_status.dart';
@@ -13,6 +14,8 @@ import 'network_test_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
+
+  set switchValue(bool switchValue) {}
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -104,12 +107,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        child: Text("S p l i t  T u n n e l i n g",style: TextStyle(fontWeight: FontWeight.bold),),
-                        padding: EdgeInsets.symmetric(vertical: 6.0,horizontal: 30.0),
-                        decoration: BoxDecoration(
-                          color:Colors.lightBlue,
-                          borderRadius: BorderRadius.circular(10),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pop(context);
+                          Get.to(() => AppListScreen());
+                        },
+                        child: Container(
+                          child: Text("S p l i t  T u n n e l i n g",style: TextStyle(fontWeight: FontWeight.bold),),
+                          padding: EdgeInsets.symmetric(vertical: 6.0,horizontal: 30.0),
+                          decoration: BoxDecoration(
+                            color:Colors.lightBlue,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ],
@@ -165,10 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 ]
               ),
-            ),
-
-            
-            
+            ), 
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Container(
@@ -183,8 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
 ),
-
-
 
       bottomNavigationBar: _changeLocation(context),
 

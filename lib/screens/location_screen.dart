@@ -25,7 +25,7 @@ class LocationScreen extends StatelessWidget {
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 10, right: 10),
           child: FloatingActionButton(
-              onPressed: () => _controller.getVpnData(),
+              onPressed: () =>  _controller.getVpnData(),
               child: Icon(CupertinoIcons.refresh)),
         ),
 
@@ -72,7 +72,7 @@ class LocationScreen extends StatelessWidget {
 
   _noVPNFound() => Center(
         child: Text(
-          'VPNs Not Found! 😔',
+          'VPNs Not Found!',
           style: TextStyle(
               fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
         ),
