@@ -1,58 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:device_apps/device_apps.dart';
+import 'package:hive/hive.dart';
+import 'package:get/get.dart';
 
-class AppListScreen extends StatefulWidget {
+class SplitTunnelingSettings extends StatefulWidget {
   @override
-  _AppListScreenState createState() => _AppListScreenState();
+  _SplitTunnelingSettingsState createState() => _SplitTunnelingSettingsState();
 }
 
-class _AppListScreenState extends State<AppListScreen> {
-  List<Application> _apps = [];
-  late List<Application> apps;
+class _SplitTunnelingSettingsState extends State<SplitTunnelingSettings> {
+  List<Application> _installedApps = [];
+  final _appSelectionsController = Get.put(AppSelectionsController());
 
   @override
   void initState() {
     super.initState();
-    _loadApps();
+    _loadInstalledApps();
   }
 
-  Future<void> _loadApps() async {
+  Future<void> _loadInstalledApps() async {
     try {
-      apps = await DeviceApps.getInstalledApplications(
-        onlyAppsWithLaunchIntent: true,
-        includeSystemApps: false,
-      );
-    } on PlatformException catch (e) {
-      print("Error: ${e.message}");
+      List<Application> apps = await DeviceApps.getInstalledApplications();
+      setState(() {
+        _installedApps = apps;
+      });
+      _appSelectionsController.initializeAppSelections(_installedApps);
+    } catch (e) {
+      print('Failed to load installed apps: $e');
     }
-
-    if (!mounted) return;
-
-    setState(() {
-      _apps = apps;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Apps List'),
+        title: Text('Split Tunneling Settings'),
       ),
-      body: ListView.builder(
-        itemCount: _apps.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: FlutterLogo(size: 36),
-            title: Text(_apps[index].appName),
-            subtitle: Text(_apps[index].packageName),
-            onTap: () {
-              DeviceApps.openApp(_apps[index].packageName);
-            },
-          );
-        },
-      ),
+      body: _installedApps.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: _installedApps.length,
+              itemBuilder: (context, index) {
+                final app = _installedApps[index];
+                return Obx(
+                  () => CheckboxListTile(
+                    title: Text(app.appName),
+                    value: _appSelectionsController.appSelections[app.appName] ?? false,
+                    onChanged: (value) {
+                      setState(() {
+                        _appSelectionsController.updateAppSelection(app.appName, value ?? false);
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
     );
+  }
+}
+
+class AppSelectionsController extends GetxController {
+  final _box = Hive.box('appSelections');
+  final _appSelections = {}.obs;
+
+  Map<dynamic, dynamic> get appSelections => _appSelections.value;
+
+  void initializeAppSelections(List<Application> installedApps) {
+    final defaultSelections = {for (var app in installedApps) app.appName: true};
+    _appSelections.value = _box.get('appSelections', defaultValue: defaultSelections);
+  }
+
+  void updateAppSelection(String appName, bool value) {
+    _appSelections.value[appName] = value;
+    _box.put('appSelections', _appSelections.value);
+    update(); // Notify UI of changes
   }
 }

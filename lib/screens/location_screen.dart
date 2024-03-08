@@ -72,7 +72,7 @@ class LocationScreen extends StatelessWidget {
 
   _noVPNFound() => Center(
         child: Text(
-          'VPNs Not Found!',
+          'VPNs Offline',
           style: TextStyle(
               fontSize: 18, color: Colors.black54, fontWeight: FontWeight.bold),
         ),

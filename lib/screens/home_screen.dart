@@ -25,7 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final _controller = Get.put(HomeController());
 
   bool switchValue=false;
-  bool themeValue=false;
+
+  bool themeValue = !Get.isDarkMode;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       GestureDetector(
                         onTap: (){
                           Navigator.pop(context);
-                          Get.to(() => AppListScreen());
+                          Get.to(() => SplitTunnelingSettings());
                         },
                         child: Container(
                           child: Text("S p l i t  T u n n e l i n g",style: TextStyle(fontWeight: FontWeight.bold),),
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         activeColor: CupertinoColors.activeBlue,
                         onChanged: (bool? value) {
                           setState(() {
-                            themeValue = value ?? false;
+                            themeValue = !themeValue;
                             Get.changeThemeMode(
                               Pref.isDarkMode ? ThemeMode.light : ThemeMode.dark
                             );
@@ -292,59 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
           SizedBox(height: 40,),
-          //button
-          /*Semantics(
-            button: true,
-            child: InkWell(
-              onTap: () {
-                _controller.connectToVpn();
-              },
-              borderRadius: BorderRadius.circular(100),
-              child: Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _controller.getButtonColor.withOpacity(.1)),
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _controller.getButtonColor.withOpacity(.3)),
-                  child: Container(
-                    width: mq.height * .14,
-                    height: mq.height * .14,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _controller.getButtonColor),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        //icon
-                        Icon(
-                          Icons.power_settings_new,
-                          size: 28,
-                          color: Colors.white,
-                        ),
 
-                        SizedBox(height: 4),
-
-                        //text
-                        Text(
-                          _controller.getButtonText,
-                          style: TextStyle(
-                              fontSize: 12.5,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),*/
-
-          //connection status label
           Container(
             margin:
                 EdgeInsets.only(top: mq.height * .015, bottom: mq.height * .02),

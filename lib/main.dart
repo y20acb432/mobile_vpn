@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'helpers/pref.dart';
 import 'screens/splash_screen.dart';
 
@@ -14,6 +15,7 @@ Future<void> main() async {
   //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
   await Pref.initializeHive();
+  await Hive.openBox('appSelections');
 
   //for setting orientation to portrait only
   SystemChrome.setPreferredOrientations(
