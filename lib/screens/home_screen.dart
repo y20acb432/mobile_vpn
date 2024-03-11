@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vpn_basic_project/helpers/pref.dart';
 import 'package:vpn_basic_project/screens/select_apps.dart';
+import 'package:vpn_basic_project/widgets/drawer_tile.dart';
 import '../controllers/home_controller.dart';
 import '../main.dart';
 import '../models/vpn_status.dart';
@@ -43,152 +44,118 @@ class _HomeScreenState extends State<HomeScreen> {
 
       //Drawer
 
-      drawer: Drawer(
-      width: mq.width * 0.60,
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    drawer: Drawer(
+  width: mq.width * 0.65,
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              child: Column(
+            SizedBox(height: 50,),
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.white,
+              child: Image.asset(
+                'assets/images/logo.png',
+                    height: 55,
+                    fit: BoxFit.cover),
+              ),
+            Expanded(
+              child: ListView(
                 children: [
-                  SizedBox(height: 75,),
-            
-                  CircleAvatar(
-                    radius: 45,
-                    backgroundColor: Colors.lightBlue,
+                  DrawerTile(
+                    title: "H o m e",
+                    onTap: () {
+                      Navigator.pop(context);
+                      Get.to(() => HomeScreen());
+                    },
+                    icon: Icons.home,
                   ),
-
-                  SizedBox(height: 33.3,),
-
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal:9),
-                    child: GestureDetector(
-                      onTap: (){
-                        Navigator.pop(context);
-                        Get.to(() => HomeScreen());
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Text("H o m e",style: TextStyle(fontWeight: FontWeight.bold),),
-                            padding: EdgeInsets.symmetric(vertical: 6.0,horizontal: 77),
-                            decoration: BoxDecoration(
-                              color:Colors.lightBlue,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-
-                  GestureDetector(
-                    onTap: (){
+                  DrawerTile(
+                    title: "S e r v e r  I n f o",
+                    onTap: () {
                       Navigator.pop(context);
                       Get.to(() => NetworkTestScreen());
                     },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          child: Text("S e r v e r  I n f o",style: TextStyle(fontWeight: FontWeight.bold),),
-                          padding: EdgeInsets.symmetric(vertical: 6.0 , horizontal: 50),
-                          decoration: BoxDecoration(
-                            color:Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ],
-                    ),
+                    icon: Icons.cloud,
                   ),
-                  SizedBox(height: 10,),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.pop(context);
-                          Get.to(() => SplitTunnelingSettings());
-                        },
-                        child: Container(
-                          child: Text("S p l i t  T u n n e l i n g",style: TextStyle(fontWeight: FontWeight.bold),),
-                          padding: EdgeInsets.symmetric(vertical: 6.0,horizontal: 30.0),
-                          decoration: BoxDecoration(
-                            color:Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ],
+                  DrawerTile(
+                    title: "S p l i t  T u n n e l i n g",
+                    onTap: () {
+                      Navigator.pop(context);
+                      Get.to(() => SplitTunnelingSettings());
+                    },
+                    icon: Icons.apps_outlined,
                   ),
-                  SizedBox(height: 10,),
-
-                  GestureDetector(
+                  DrawerTile(
+                    title: "C o u n t r y ' s",
                     onTap: () {
                       Navigator.pop(context);
                       Get.to(() => LocationScreen());
                     },
-                    child: Container(
-                      child: Text("C o u n t r y ' s",style: TextStyle(fontWeight: FontWeight.bold),),
-                      padding: EdgeInsets.symmetric(vertical: 6.0,horizontal: 59.0),
-                      decoration: BoxDecoration(
-                        color:Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                    icon: CupertinoIcons.globe,
                   ),
                   SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 9),
-                    child: Container(
-                      child: Text("T h e m e",style: TextStyle(fontWeight: FontWeight.bold),),
-                        padding: EdgeInsets.symmetric(vertical: 6.0,horizontal: 42.0),
-                          decoration: BoxDecoration(
-                            color:Colors.lightBlue,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                    children: [
+                      SizedBox(width: 10,),
+                      Icon(
+                        themeValue?Icons.light_mode_rounded:Icons.dark_mode_rounded,
+                        color: Colors.blue,
+                      ),
+                      SizedBox(width: 17,),
+                      Text(
+                        "T h e m e",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: CupertinoSwitch(
+                      Spacer(),
+                      CupertinoSwitch(
                         value: themeValue,
-                        activeColor: CupertinoColors.activeBlue,
+                        activeColor: Colors.blue,
                         onChanged: (bool? value) {
                           setState(() {
                             themeValue = !themeValue;
                             Get.changeThemeMode(
-                              Pref.isDarkMode ? ThemeMode.light : ThemeMode.dark
+                              Pref.isDarkMode ? ThemeMode.light : ThemeMode.dark,
                             );
                             Pref.isDarkMode = !Pref.isDarkMode;
                           });
                         },
-                        ),
                       ),
+                      SizedBox(width: 10,),
                     ],
-                ),
-                ]
+                  ),
+                ],
               ),
-            ), 
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Container(
-                      child: Text("D e v e l o p e r  I n f o",style: TextStyle(fontWeight: FontWeight.bold),),
-                      padding: EdgeInsets.symmetric(vertical: 6.0,horizontal: 40.0),
-                      decoration: BoxDecoration(
-                        color:Colors.lightGreen,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
             ),
           ],
         ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Container(
+          child: Text(
+            "      D e v e l o p e r  I n f o      ",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      ),
+    ],
+  ),
 ),
 
       bottomNavigationBar: _changeLocation(context),
@@ -279,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       scale: 3.0,
                       child: CupertinoSwitch(
                                 // This bool value toggles the switch.
-                      value: switchValue,
+                      value: _controller.vpnState.value == VpnEngine.vpnDisconnected?switchValue=false:switchValue=true,
                       //activeColor: CupertinoColors.activeGreen,
                       activeColor: _controller.getButtonColor,
                       onChanged: (bool? value) {

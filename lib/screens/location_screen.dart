@@ -60,7 +60,7 @@ class LocationScreen extends StatelessWidget {
 
             //text
             Text(
-              'Loading',
+              'loading',
               style: TextStyle(
                   fontSize: 18,
                   color: Colors.black54,

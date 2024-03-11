@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:hive/hive.dart';
@@ -20,7 +21,10 @@ class _SplitTunnelingSettingsState extends State<SplitTunnelingSettings> {
 
   Future<void> _loadInstalledApps() async {
     try {
-      List<Application> apps = await DeviceApps.getInstalledApplications();
+      List<Application> apps = await DeviceApps.getInstalledApplications(
+          includeAppIcons: true,
+          includeSystemApps: true,
+      );
       setState(() {
         _installedApps = apps;
       });
@@ -43,18 +47,26 @@ class _SplitTunnelingSettingsState extends State<SplitTunnelingSettings> {
               itemBuilder: (context, index) {
                 final app = _installedApps[index];
                 return Obx(
-                  () => CheckboxListTile(
-                    title: Text(app.appName),
-                    value: _appSelectionsController.appSelections[app.appName] ?? false,
-                    onChanged: (value) {
-                      setState(() {
-                        _appSelectionsController.updateAppSelection(app.appName, value ?? false);
-                      });
-                    },
-                  ),
-                );
-              },
+                  () => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [ 
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(app.appName),
+                      ),
+                      CupertinoSwitch(
+                        value: _appSelectionsController.appSelections[app.appName] ?? false,
+                        onChanged: (value) {
+                        setState(() {
+                          _appSelectionsController.updateAppSelection(app.appName, value);
+                    });
+                  },
+                ),
+              ],
             ),
+          );
+        },
+      ),
     );
   }
 }
