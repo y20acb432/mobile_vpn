@@ -22,6 +22,7 @@ class _SplitTunnelingSettingsState extends State<SplitTunnelingSettings> {
   Future<void> _loadInstalledApps() async {
     try {
       List<Application> apps = await DeviceApps.getInstalledApplications(
+          onlyAppsWithLaunchIntent: true,
           includeAppIcons: true,
           includeSystemApps: true,
       );
@@ -51,7 +52,7 @@ class _SplitTunnelingSettingsState extends State<SplitTunnelingSettings> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [ 
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                         child: Text(app.appName),
                       ),
                       CupertinoSwitch(
