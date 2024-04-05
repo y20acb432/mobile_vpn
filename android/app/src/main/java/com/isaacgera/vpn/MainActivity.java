@@ -1,4 +1,4 @@
-package com.harshRajpurohit.freeVpn;
+package com.isaacgera.vpn;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -167,7 +167,7 @@ public class MainActivity extends FlutterActivity {
                     if (call.argument("dns1") != null) dns1 = call.argument("dns1");
                     if (call.argument("dns2") != null) dns2 = call.argument("dns2");
 
-                    bypassPackages = call.argument("bypass_packages");
+                    bypassPackages = call.argument("bypass_package com.isaacgera.vpn");
 
                     if (config == null || name == null) {
                         Log.e(TAG, "Config not valid!");

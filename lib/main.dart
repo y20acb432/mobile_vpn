@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'helpers/pref.dart';
 import 'screens/splash_screen.dart';
 
-//global object for accessing device screen size
+//global object for accessing device screen sizeP
 late Size mq;
 
 Future<void> main() async {
