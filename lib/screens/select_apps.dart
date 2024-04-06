@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:hive/hive.dart';
 import 'package:get/get.dart';
+import 'package:vpn_basic_project/services/vpn_engine.dart';
 
 class SplitTunnelingSettings extends StatefulWidget {
   @override
@@ -22,9 +23,9 @@ class _SplitTunnelingSettingsState extends State<SplitTunnelingSettings> {
   Future<void> _loadInstalledApps() async {
     try {
       List<Application> apps = await DeviceApps.getInstalledApplications(
-          onlyAppsWithLaunchIntent: true,
-          includeAppIcons: true,
-          includeSystemApps: true,
+        onlyAppsWithLaunchIntent: true,
+        includeAppIcons: true,
+        includeSystemApps: true,
       );
       setState(() {
         _installedApps = apps;
@@ -50,25 +51,33 @@ class _SplitTunnelingSettingsState extends State<SplitTunnelingSettings> {
                 return Obx(
                   () => Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [ 
+                    children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         child: Text(app.appName),
                       ),
                       CupertinoSwitch(
-                        value: _appSelectionsController.appSelections[app.appName] ?? false,
+                        value: _appSelectionsController.appSelections[app.packageName] ?? false,
                         onChanged: (value) {
-                        setState(() {
-                          _appSelectionsController.updateAppSelection(app.appName, value);
-                    });
-                  },
-                ),
-              ],
+                          setState((){
+                            _appSelectionsController.updateAppSelection(app.packageName, value);
+                            handleVPNActiveState();
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
+  }
+  
+  Future<void> handleVPNActiveState() async {
+    if(await VpnEngine.isConnected())
+    {
+      VpnEngine.stopVpn();
+    }
   }
 }
 
@@ -79,12 +88,14 @@ class AppSelectionsController extends GetxController {
   Map<dynamic, dynamic> get appSelections => _appSelections.value;
 
   void initializeAppSelections(List<Application> installedApps) {
-    final defaultSelections = {for (var app in installedApps) app.appName: true};
+    final defaultSelections = {
+      for (var app in installedApps) app.packageName: true
+    };
     _appSelections.value = _box.get('appSelections', defaultValue: defaultSelections);
   }
 
-  void updateAppSelection(String appName, bool value) {
-    _appSelections.value[appName] = value;
+  void updateAppSelection(String packageName, bool value) {
+    _appSelections.value[packageName] = value;
     _box.put('appSelections', _appSelections.value);
     update(); // Notify UI of changes
   }

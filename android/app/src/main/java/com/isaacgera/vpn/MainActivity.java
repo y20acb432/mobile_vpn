@@ -167,7 +167,7 @@ public class MainActivity extends FlutterActivity {
                     if (call.argument("dns1") != null) dns1 = call.argument("dns1");
                     if (call.argument("dns2") != null) dns2 = call.argument("dns2");
 
-                    bypassPackages = call.argument("bypass_package com.isaacgera.vpn");
+                    bypassPackages = call.argument("bypass_packages");
 
                     if (config == null || name == null) {
                         Log.e(TAG, "Config not valid!");

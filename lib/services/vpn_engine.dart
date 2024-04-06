@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../models/vpn_status.dart';
 import '../models/vpn_config.dart';
+import 'package:hive/hive.dart';
 
 class VpnEngine {
   ///Channel to native
@@ -22,6 +23,14 @@ class VpnEngine {
 
   ///Start VPN easily
   static Future<void> startVpn(VpnConfig vpnConfig) async {
+    List<String> falseList = [];
+    falseList = getFalseSelections();
+    // falseList.forEach((ele) {
+    //     print(ele);
+    //  });
+    List<String> packageName = ["com.isaacgera.vpn"];
+    packageName.addAll(falseList);
+
     // log(vpnConfig.config);
     return MethodChannel(_methodChannelVpnControl).invokeMethod(
       "start",
@@ -30,6 +39,7 @@ class VpnEngine {
         "country": vpnConfig.country,
         "username": vpnConfig.username,
         "password": vpnConfig.password,
+        "bypass_packages":packageName,
       },
     );
   }
@@ -64,4 +74,19 @@ class VpnEngine {
   static const String vpnConnecting = "connecting";
   static const String vpnPrepare = "prepare";
   static const String vpnDenied = "denied";
+  
 }
+
+List<String> getFalseSelections() {
+  final Box<dynamic> _box = Hive.box('appSelections');
+  final Map<dynamic, dynamic> appSelections = _box.get('appSelections');
+
+  List<String> falseSelections = [];
+  appSelections.forEach((packageName, value) {
+    if (value == false) {
+      falseSelections.add(packageName.toString());
+    }
+  });
+  return falseSelections;
+}
+
